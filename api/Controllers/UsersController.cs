@@ -21,6 +21,7 @@ namespace api.Controllers
             _context = context;
         }
 
+       /* Synchronous mechanism which is not recommended
         [HttpGet]
         public ActionResult<IEnumerable<AppUser>> GetUsers()
         {
@@ -36,9 +37,9 @@ namespace api.Controllers
             var user = _context.Users.Find(id);
             return user;
         }
-        
+        */
        //Below end point returns the list of users, it would be consumed as  /api/users
-        /*[HttpGet]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();
@@ -52,7 +53,7 @@ namespace api.Controllers
         {
             var user = await _context.Users.FindAsync(id);
             return user;
-        }*/
+        }
         
 
     }
