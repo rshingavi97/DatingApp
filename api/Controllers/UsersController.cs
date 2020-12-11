@@ -5,12 +5,10 @@ using System.Linq;
 using api.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Authorization; // for [Authorize] attribute
 namespace api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController:ControllerBase
+    public class UsersController:BaseApiController
     {
         private readonly DataContext _context;
         public UsersController(DataContext context)
@@ -48,6 +46,7 @@ namespace api.Controllers
 
         //Below end point returns the specific of user of given id, 
         //it would be consumed as  /api/user/3  here 3 is a id
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {

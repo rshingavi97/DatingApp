@@ -12,7 +12,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer; // for JwtBearerDefaults
+using Microsoft.IdentityModel.Tokens; // FOR TokenValidationParameters
 using api.Data;
+using api.Interfaces;
+using api.Services;
+using System.Text;
 
 namespace api
 {
@@ -29,8 +34,8 @@ namespace api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ITokenService,TokenService>();
             //step 16 (start)  Creation of connection string 
-
             services.AddDbContext<DataContext>(options=>{
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));
             });
@@ -38,6 +43,23 @@ namespace api
             //step 16 (end)  Creation of connection string 
             services.AddControllers();
             services.AddCors();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
+                options=>{
+                    options.TokenValidationParameters=new TokenValidationParameters{
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"])),
+                        /*Our main concern is the authentication of user, above two flags are doing that task.
+                        we are additionally adding below two parameters.
+                        ValidateIssuer means our Api project which issues the token
+                        ValidateAudience , is the Angular client application
+                        */
+                        ValidateIssuer = false, 
+                        ValidateAudience = false,
+
+                    };
+
+                }
+            );
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
@@ -53,6 +75,7 @@ namespace api
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors(policy=>policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
