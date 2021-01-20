@@ -1,0 +1,38 @@
+<nav class="navbar navbar-expand-md navbar-dark  bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">DatingApp</a>
+        
+        <ul class="navbar-nav me-auto" *ngIf="objAccService.recentUser$ |async">
+          <li class="nav-item">
+            <a class="nav-link" href="#">Matches</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Lists</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Messages</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" (click)="logout()">Logout</a>
+          </li>
+        </ul>
+        <div class="dropdown" *ngIf=" objAccService.recentUser$ | async" dropdown>
+            <a class="dropdown-toggle text-light" dropdownToggle>Welcome user</a>
+            <div class="dropdown-menu mt-3" *dropdownMenu>
+                <!-- mt-3 is a Bootstrap class which stands for Margin-Top by 3 position.-->
+                <a class="dropdown-item">Edit Profile</a>
+                <a class="dropdown-item"(click)="logout()">Logout</a>
+             </div>
+        </div>
+
+        <!-- faced issue for *ngIf="!recentUser$ | async because we can not use not operator ! with like this.
+          hence check it as (recentUser$ | async) === null -->
+        <form  *ngIf="( objAccService.recentUser$ | async) == null" #loginForm="ngForm" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()" autocomplete="off">
+          <input name="username" [(ngModel)]="loginModel.username" class="form-control mr-sm-2" 
+          type="text" placeholder="UserName">
+          
+          <input name="password" [(ngModel)]="loginModel.password" class="form-control mr-sm-2" type="password" placeholder="Password">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+        </form>
+    </div>
+  </nav>
