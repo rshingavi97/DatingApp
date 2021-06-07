@@ -17,8 +17,6 @@ namespace api.Services
             /* initialize the _key.
             SymmetricSecurityKey() constructor requires the byte-array of token key. */
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
-
-
         }
         public string CreateToken(AppUser user){
             /*

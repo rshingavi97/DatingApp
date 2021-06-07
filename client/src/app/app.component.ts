@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     
   }
   /*
-  //This functionality is implemented inside Register component
+  //This functionality is implemented inside Register componentng
   getUsers():void{
     this.objHttp.get('https://localhost:5001/api/users/')
     .subscribe(

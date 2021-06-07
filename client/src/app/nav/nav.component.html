@@ -1,23 +1,24 @@
-<nav class="navbar navbar-expand-md navbar-dark  bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark  bg-primary">
     <div class="container">
-        <a class="navbar-brand" href="#">DatingApp</a>
+        <a class="navbar-brand" routerLink="/" routerLinkActive='active'>DatingApp</a>
+        <button class="btn" routerLink='/errors'>Errors</button>
         
         <ul class="navbar-nav me-auto" *ngIf="objAccService.recentUser$ |async">
           <li class="nav-item">
-            <a class="nav-link" href="#">Matches</a>
+            <a class="nav-link" routerLink='/members' routerLinkActive='active'>Matches</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Lists</a>
+            <a class="nav-link" routerLink='/lists' routerLinkActive='active'>Lists</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Messages</a>
+            <a class="nav-link" routerLink='/messages' routerLinkActive='active'>Messages</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#" (click)="logout()">Logout</a>
           </li>
         </ul>
-        <div class="dropdown" *ngIf=" objAccService.recentUser$ | async" dropdown>
-            <a class="dropdown-toggle text-light" dropdownToggle>Welcome user</a>
+        <div class="dropdown" *ngIf="(objAccService.recentUser$ | async) as user" dropdown>
+            <a class="dropdown-toggle text-light" dropdownToggle>Welcome {{user.username|titlecase}}</a>
             <div class="dropdown-menu mt-3" *dropdownMenu>
                 <!-- mt-3 is a Bootstrap class which stands for Margin-Top by 3 position.-->
                 <a class="dropdown-item">Edit Profile</a>
@@ -30,9 +31,8 @@
         <form  *ngIf="( objAccService.recentUser$ | async) == null" #loginForm="ngForm" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()" autocomplete="off">
           <input name="username" [(ngModel)]="loginModel.username" class="form-control mr-sm-2" 
           type="text" placeholder="UserName">
-          
           <input name="password" [(ngModel)]="loginModel.password" class="form-control mr-sm-2" type="password" placeholder="Password">
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
+          <button class="btn btn-success my-2 my-sm-0" type="submit">Login</button>
         </form>
     </div>
   </nav>
